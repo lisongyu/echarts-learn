@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="height:400px"></div>
+<!-- ECharts单文件引入 -->
+<!--<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>-->
+<!--TODO 本地下载后的文件引入-->
+<script src="echarts-2.1.8/build/dist/echarts.js"></script>
+<script type="text/javascript">
+    // 路径配置
+    require.config({
+        paths: {
+            //网上地址
+//            echarts: 'http://echarts.baidu.com/build/dist'
+            //本地地址
+            echarts: 'echarts-2.1.8/build/dist'
+        }
+        //用paths来映射配置项echarts-2.1.8/build/dist 用echarts代替
+    });
+
+    // 使用
+    require(
+            //使用require机制进行加载
+            [
+                'echarts',//加载echarts.js
+                'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                'echarts/chart/line'
+            ],
+            //ec为echarts.js的参数
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('main'));
+
+                var option = {
+
+                    //提示框（默认隐藏，可没有此项）
+                    tooltip: {
+                        show: true
+                    },
+                    //图例（可无此项）
+                    legend: {
+                        data:['今年国内生产总值','去年比例']//多条数据
+                    },
+                    //工具箱(可没有此项)
+                    toolbox: {
+                        show : true,
+                        orient: 'horizontal' ,
+                        x: 'right',
+                        y: 'top',
+                        feature : {
+                            mark : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    //X轴
+                    xAxis : [
+                        {
+                            type : 'category',//种类
+                            data : ["1月","2月","3月","4月","5月","6月"]//X轴显示内容
+                        }
+                    ],
+                    //Y轴
+                    yAxis : [
+                        {
+                            type : 'value'
+                        },
+                            //第二个纵轴坐标
+                        {
+                            type : 'value',
+                            name:'%'
+                        }
+                    ],
+                    //设置数据
+                    series : [
+                        //单条数据
+                        {
+                            "name":"今年国内生产总值",
+                            "type":"bar",
+                            "data":[5, 20, 40, 10, 10, 20]//X轴对应的数值
+
+                        },
+                        {
+                            "name":"去年比例",
+                            "type":"line",
+                            //结合
+                            yAxisIndex: 1,
+                            "data":[50, 80, 10, 70, 40, 62]//X轴对应的数值
+
+                        }
+                    ]
+                };
+
+                // 为echarts对象加载数据，生成图表
+                //myChart 所生成图表的对象。 option选项
+                myChart.setOption(option);
+            }
+    );
+</script>
+</body>
