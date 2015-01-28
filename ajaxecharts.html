@@ -37,7 +37,7 @@
                 // 基于准备好的dom，初始化echarts图表
                 var myChart = ec.init(document.getElementById('main'));
 
-                var option = {
+                var config = {
 
                     //提示框（默认隐藏，可没有此项）
                     tooltip: {
@@ -45,27 +45,16 @@
                     },
                     //图例（可无此项）
                     legend: {
-                        data:['销量']
+//                        data:['销量']
+                        data:[]
                     },
-                    //工具箱(可没有此项)
-                    toolbox: {
-                        show : true,
-                        orient: 'horizontal' ,
-                        x: 'right',
-                        y: 'top',
-                        feature : {
-                            mark : {show: true},
-                            dataView : {show: true, readOnly: false},
-                            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore : {show: true},
-                            saveAsImage : {show: true}
-                        }
-                    },
+
                     //X轴
                     xAxis : [
                         {
                             type : 'category',//种类
-                            data : ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+//                            data : ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+                            data : []
                         }
                     ],
                     //Y轴
@@ -84,11 +73,29 @@
                         }
                     ]
                 };
-
                 // 为echarts对象加载数据，生成图表
-                //myChart 所生成图表的对象。 option选项
+                //myChart 所生成图表的对象。 config选项
 
-                myChart.setOption(option);
+                //利用ajax获取数据
+                var sql='json/data.js';
+                var request = $.ajax({
+                    url: sql,
+                    type: "get",
+                    cache: false
+                });
+                request.done(function(data) {
+                    //使用eval 将字符串转化为对象
+                    var series = eval(data);
+                    //配置的名字等于由ajax获取的名字，坐标为获取的坐标
+                   config.legend.data=series.name;
+                   config.xAxis[0].data=series.xlist;
+                   myChart.setOption(config);
+                });
+                request.fail(function(data) {
+                    alert("数据小哥正在维修，请稍后访问");
+                });
+
+
 
 
 
