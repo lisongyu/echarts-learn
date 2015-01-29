@@ -66,17 +66,26 @@
                     //设置数据
                     series : [
                         //单条数据
-                        {
-                            "name":"销量",
-                            "type":"bar",
-                            "data":[5, 20, 40, 10, 10, 20]
-                        }
+//                        {
+//                            "name":"销量",
+//                            "type":"bar",
+//                            "data":[5, 20, 40, 10, 10, 20]
+//                        }
                     ]
                 };
                 // 为echarts对象加载数据，生成图表
                 //myChart 所生成图表的对象。 config选项
 
                 //利用ajax获取数据
+                //series数据末班，因name,data可变故传参
+                function template(name, data) {
+                    var obj = {
+                        name: name,
+                        type: 'bar',
+                        data: data
+                    };
+                    return obj
+                }
                 var sql='json/data.js';
                 var request = $.ajax({
                     url: sql,
@@ -89,6 +98,18 @@
                     //配置的名字等于由ajax获取的名字，坐标为获取的坐标
                    config.legend.data=series.name;
                    config.xAxis[0].data=series.xlist;
+                    //设置数据
+                    //根据每一个图例生成各组数据(思想即一个图例的索引对应相应数据的索引)
+                    $(series.name).each(function(index,value){
+//                        console.log(value);
+                        var everyData=series.data[index];
+                        var everyName=series.name[index];
+                        config.series.push(template(value,everyData));
+
+
+                    });
+
+//                   config.series.push(template());
                    myChart.setOption(config);
                 });
                 request.fail(function(data) {
