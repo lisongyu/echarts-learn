@@ -67,6 +67,9 @@
 //                        }
                     ]
                 };
+                console.log(config.xAxis[0].data);
+//                console.log(config.xAxis.data);
+
                 // 为echarts对象加载数据，生成图表
                 //myChart 所生成图表的对象。 config选项
 
@@ -80,17 +83,19 @@
                     };
                     return obj
                 }
-                var sql='json/data.js';
-//               var sql='json/data.json';
+//                var sql='json/data.js';
+               var sql='json/data.json';
                 var request = $.ajax({
                     url: sql,
                     type: "get",
-//                    dataType:"json",
+                    dataType:"json",
                     cache: false
                 });
                 request.done(function(data) {
+
                     //使用eval 将字符串转化为对象
                     var series = eval(data);
+
                     //配置的名字等于由ajax获取的名字，坐标为获取的坐标
                    config.legend.data=series.name;
                    config.xAxis[0].data=series.xlist;
