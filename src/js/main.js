@@ -1,0 +1,95 @@
+/*
+* Created by songyu Li on 15/1/29.
+* */
+require(
+//使用require机制进行加载
+    [
+        'echarts',//加载echarts.js
+        'jquery',
+        'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+        'echarts/chart/line'
+    ],
+//ec为echarts.js的参数
+    function (ec,$) {
+        // 基于准备好的dom，初始化echarts图表
+        var myChart = ec.init(document.getElementById('main'));
+
+        var config = {
+
+            //提示框（默认隐藏，可没有此项）
+            tooltip: {
+                show: true
+            },
+            //图例（可无此项）
+            legend: {
+//                        data:['销量']
+                data:[]
+            },
+            //X轴
+            xAxis : [
+                {
+                    type : 'category',//种类
+//                            data : ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+                    data : []
+                }
+            ],
+            //Y轴
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            //设置数据
+            series : [
+                //单条数据
+//                        {
+//                            "name":"销量",
+//                            "type":"bar",
+//                            "data":[5, 20, 40, 10, 10, 20]
+//                        }
+            ]
+        };
+        // 为echarts对象加载数据，生成图表
+        //myChart 所生成图表的对象。 config选项
+
+        //利用ajax获取数据
+        //series数据末班，因name,data可变故传参
+        function template(name, data) {
+            var obj = {
+                name: name,
+                type: 'bar',
+                data: data
+            };
+            return obj
+        }
+        var sql='json/data.js';
+//               var sql='json/data.json';
+        var request = $.ajax({
+            url: sql,
+            type: "get",
+//                    dataType:"json",
+            cache: false
+        });
+        request.done(function(data) {
+            //使用eval 将字符串转化为对象
+            var series = eval(data);
+            //配置的名字等于由ajax获取的名字，坐标为获取的坐标
+            config.legend.data=series.name;
+            config.xAxis[0].data=series.xlist;
+            //设置数据
+            //根据每一个图例生成各组数据(思想即一个图例的索引对应相应数据的索引)
+            $(series.name).each(function(index,value){
+                var everyData=series.data[index];
+                config.series.push(template(value,everyData));
+            });
+            //生成图表
+            myChart.setOption(config);
+        });
+        request.fail(function(data) {
+            alert("数据小哥正在维修，请稍后访问");
+        });
+
+
+
+    }
+);
