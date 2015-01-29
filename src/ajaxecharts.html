@@ -6,17 +6,12 @@
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div id="main" style="height:400px"></div>
-<!-- ECharts单文件引入 -->
-<!--<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>-->
 <!--TODO 本地下载后的文件引入-->
 <script src="echarts-2.1.8/build/dist/echarts.js"></script>
 <script type="text/javascript">
     // 路径配置
     require.config({
         paths: {
-            //网上地址
-//            echarts: 'http://echarts.baidu.com/build/dist'
-            //本地地址
             echarts: 'echarts-2.1.8/build/dist',
             jquery:'js/jquery-1.7.2.min'
         }
@@ -48,7 +43,6 @@
 //                        data:['销量']
                         data:[]
                     },
-
                     //X轴
                     xAxis : [
                         {
@@ -87,9 +81,11 @@
                     return obj
                 }
                 var sql='json/data.js';
+//               var sql='json/data.json';
                 var request = $.ajax({
                     url: sql,
                     type: "get",
+//                    dataType:"json",
                     cache: false
                 });
                 request.done(function(data) {
@@ -101,24 +97,14 @@
                     //设置数据
                     //根据每一个图例生成各组数据(思想即一个图例的索引对应相应数据的索引)
                     $(series.name).each(function(index,value){
-//                        console.log(value);
                         var everyData=series.data[index];
-                        var everyName=series.name[index];
                         config.series.push(template(value,everyData));
-
-
                     });
-
-//                   config.series.push(template());
                    myChart.setOption(config);
                 });
                 request.fail(function(data) {
                     alert("数据小哥正在维修，请稍后访问");
                 });
-
-
-
-
 
 
 
