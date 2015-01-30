@@ -5,7 +5,7 @@
 ---
 1. [初识echarts](#初识echarts)
 2. [编写自己的echarts图表](#编写自己的echarts图表)
-3. [根据需求编写echarts图表](#根据需求编写echarts图表)
+3. [编写工作中需求的echarts图表](#编写工作中需求的echarts图表)
 
 ---
 ####初识echarts
@@ -196,7 +196,7 @@ myChart.setOption(config);
 参考页面 [ajacecharts.html](https://github.com/lisongyu/echarts-learn)
 
 ---
-####根据需求编写工作中的echarts图表
+####编写工作中需求的echarts图表
 
 大家已经能够用ajax生成图表，但考虑到大量图表的问题，这就迫使我们不得不对其进行规划。
 #####整体结构的规划
